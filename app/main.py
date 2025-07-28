@@ -17,11 +17,12 @@ students=[
         "rollno":26
     }
 ]
-#READ
+#READ: GET THE LIST OF ALL STUDENT
 @app.get("/students")
 def getTodo():
     return students
-#CREATE
+
+#CREATE: ADD NEW STUDENTS
 @app.post("/addStudent")
 def addStudent(student:Student): # its a type hint . Accepts and validates JSON input using Pydantic
     for s in students:
@@ -30,7 +31,7 @@ def addStudent(student:Student): # its a type hint . Accepts and validates JSON 
     students.append(student.dict())
     return {"message": "Student added successfully", "students": students}
 
-# DELETE: 
+# DELETE A STUDENT BY ROLL NUMBER
 @app.delete("/students/{rollno}")
 def delete_student(rollno: int):
     for s in students:
@@ -39,7 +40,7 @@ def delete_student(rollno: int):
             return {"message": "Student deleted", "students": students}
     raise HTTPException(status_code=404, detail="Student not found")
 
-# UPDATE:
+# UPDATE STUDENT DETAIL BY ROLL NUMBER
 @app.put("/students/{rollno}")
 def update_student(rollno: int, updated_student: Student):
     for index, s in enumerate(students):
