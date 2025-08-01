@@ -10,7 +10,7 @@ from .config.db import create_tables, engine
 
 app = FastAPI()
 
-# Ensure tables are created at startup
+
 create_tables()
 
 @app.get("/get_todos")
