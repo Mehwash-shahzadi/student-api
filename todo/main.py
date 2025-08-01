@@ -1,32 +1,61 @@
-from sqlmodel import Field, Session, SQLModel, create_engine, select
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
+from sqlmodel import Session, select
+from dotenv import load_dotenv
+load_dotenv()
+
+
+from .models.todos import Todo, UpdateTodo, CreateTodo
+from .config.db import create_tables, engine
+
 
 app = FastAPI()
 
-DATABASE_URL = "postgresql://postgres:route@localhost:5432/studentdb"
-engine = create_engine(DATABASE_URL, echo=True)
+# Ensure tables are created at startup
+create_tables()
 
-class Student(SQLModel, table=True):
-    id: int | None = Field(default=None, primary_key=True)
-    name: str
-    age: int
-    is_active: bool
-
-SQLModel.metadata.create_all(engine)
-
-@app.get("/getStudents")
-def getStudents():
+@app.get("/get_todos")
+def get_todos():
     with Session(engine) as session:
-        statement = select(Student)
+        statement = select(Todo)
         results = session.exec(statement)
         data = results.all()
         print("Fetched:", data)
         return data
-    
-@app.post("/addStudent")
-def add_student(student: Student):
+
+@app.post("/create_todo")
+def create_todo(todo: CreateTodo):
     with Session(engine) as session:
-        session.add(student)
+        new_todo = Todo(**todo.dict())
+        session.add(new_todo)
         session.commit()
-        session.refresh(student)
-        return student
+        session.refresh(new_todo)
+        return new_todo
+
+@app.put("/update_todo/{id}")
+def update_todo(id: int, todo: UpdateTodo):
+    with Session(engine) as session:
+        db_todo = session.get(Todo, id)
+        if not db_todo:
+            raise HTTPException(status_code=404, detail="Todo not found")
+        todo_data = todo.model_dump(exclude_unset=True)
+        db_todo.sqlmodel_update(todo_data)
+        session.add(db_todo)
+        session.commit()
+        session.refresh(db_todo)
+        return db_todo
+
+@app.delete("/delete_todo/{todo_id}")
+def delete_todo(todo_id: int):
+    with Session(engine) as session:
+        db_todo = session.get(Todo, todo_id)
+        if not db_todo:
+            raise HTTPException(status_code=404, detail="Todo not found")
+        session.delete(db_todo)
+        session.commit()
+        return {"message": "Todo deleted successfully"}
+
+
+
+
+      
+
