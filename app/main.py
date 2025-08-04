@@ -1,63 +1,22 @@
-from fastapi import FastAPI,HTTPException
-from pydantic import BaseModel
+from fastapi import FastAPI
+from app.config.db import init_db
+from app.routers import student, course, enrollment, grade,attendance
 
-app = FastAPI()
+app = FastAPI(title="Student Management System")
 
-# class Student(BaseModel):
-#     """Data model for a student."""
-#     name: str
-#     rollno: int
+# Initialize the database
+init_db()
 
-# students=[
-#     {
-#         "name":"mishi",
-#         "rollno":23
-#     },
-#     {
-#         "name":"muteem",
-#         "rollno":26
-#     }
-# ]
-
-# @app.get("/students")
-# def getTodo():
-#     """Retrieve the list of all students."""
-#     return students
-
-# @app.post("/addStudent")
-# def addStudent(student:Student): # its a type hint . Accepts and validates JSON input using Pydantic
-#     """Add a new student to the list.Raises 400 if the roll number already exists."""
-#     for s in students:
-#         if s["rollno"] == student.rollno:
-#                         raise HTTPException(status_code=400, detail="Roll number already exists")
-#     students.append(student.dict())
-#     return {"message": "Student added successfully", "students": students}
+# Include routers
+app.include_router(student.router, prefix="/students", tags=["Students"])
+app.include_router(course.router, prefix="/courses", tags=["Courses"])
+app.include_router(enrollment.router, prefix="/enrollments", tags=["Enrollments"])
+app.include_router(grade.router, prefix="/grades", tags=["Grades"])
+app.include_router(attendance.router, prefix="/attendance", tags=["Attendance"])
 
 
-# @app.delete("/students/{rollno}")
-# def delete_student(rollno: int):
-#     """ Delete a student by roll number.Raises 404 if the student is not found."""
-#     for s in students:
-#         if s["rollno"] == rollno:
-#             students.remove(s)
-#             return {"message": "Student deleted", "students": students}
-#     raise HTTPException(status_code=404, detail="Student not found")
-
-# #
-# @app.put("/students/{rollno}")
-# def update_student(rollno: int, updated_student: Student):
-#     """Update a student's information by roll number.Raises 404 if the student is not found."""
-#     for index, s in enumerate(students):
-#         if s["rollno"] == rollno:
-#             students[index] = updated_student.dict()
-#             return {"message": "Student updated", "students": students}
-#     raise HTTPException(status_code=404, detail="Student not found")
 
 
-@app.get("/student/{id}/assignment/{ass_id}")
-def add_student(id:int,ass_id:int,fname:str):
-    return {
-        "student_id": id,
-        "assignment_id":ass_id,
-        "firstname":fname
-        }
+
+      
+
