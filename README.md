@@ -81,25 +81,23 @@ poetry run uvicorn app.main:app --reload
 
 uvicorn app.main:app --reload
 
-🧪 API Capabilities
+### 🧪 API Capabilities
 
-📘 /students
-GET /students — Retrieve all students
+#### 📘 /students
 
-POST /students — Create a new student
+- `GET /students` — Retrieve all students
+- `POST /students` — Create a new student
+- `PUT /students/{id}` — Update an existing student
+- `DELETE /students/{id}` — Delete a student
 
-PUT /students/{id} — Update an existing student by ID
+#### 📘 /courses, /enrollments, /grades, /attendance
 
-DELETE /students/{id} — Delete a student by ID
+- `GET` — Retrieve all records
+- `POST` — Create a new record
 
-📘 /courses, /enrollments, /grades, /attendance
-GET — Retrieve all records
+> ⚠️ **Note:** Update and delete operations are not implemented for these endpoints.
 
-POST — Create a new record
-
-⚠️ Note: Update and delete operations are not implemented for these endpoints.
-
-✅ Best Practices Followed
+### ✅ Best Practices Followed
 
 🔒 Secure config with .env
 
