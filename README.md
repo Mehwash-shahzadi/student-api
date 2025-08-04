@@ -61,15 +61,52 @@ git clone https://github.com/your-username/student_management.git
 cd student_management
 ```
 
-3. Install dependencies
+### 2. Configure environment variables
+
+DATABASE_URL=postgresql://username:password@localhost:5432/student_db
+
+### 3. Install dependencies
 
 poetry install
 
-Alternative: pip
+**Alternative: pip**
 
 pip install -r requirements.txt
 
 ▶️ Run the Application
 
-Using Poetry
+**Using Poetry**
+
 poetry run uvicorn app.main:app --reload
+
+uvicorn app.main:app --reload
+
+🧪 API Capabilities
+
+📘 /students
+GET /students — Retrieve all students
+
+POST /students — Create a new student
+
+PUT /students/{id} — Update an existing student by ID
+
+DELETE /students/{id} — Delete a student by ID
+
+📘 /courses, /enrollments, /grades, /attendance
+GET — Retrieve all records
+
+POST — Create a new record
+
+⚠️ Note: Update and delete operations are not implemented for these endpoints.
+
+✅ Best Practices Followed
+
+🔒 Secure config with .env
+
+📦 Managed dependencies via Poetry
+
+🧱 Clean modular folder structure
+
+🧪 Automatic validation with Pydantic (via SQLModel)
+
+🔁 Consistent API routing
