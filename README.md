@@ -99,12 +99,8 @@ uvicorn app.main:app --reload
 
 ### ✅ Best Practices Followed
 
-🔒 Secure config with .env
-
+🔒 Secure config with .en
 📦 Managed dependencies via Poetry
-
 🧱 Clean modular folder structure
-
 🧪 Automatic validation with Pydantic (via SQLModel)
-
 🔁 Consistent API routing
